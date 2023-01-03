@@ -1,0 +1,77 @@
+asyncapi: '2.5.0'
+info:
+  title: Insurance Kafka API
+  version: '1.0.0'
+  description: |
+    The Insurance Kafka API API allows you to create an new Insurance.
+
+    ### Check out its awesome features:
+
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  test:
+    url: test.mykafkacluster.org:8092
+    protocol: kafka-secure
+    description: Test broker
+    security:
+      - saslScram: []
+
+defaultContentType: application/json
+
+channels:
+  insurance.kfz.car.1.0.event.{customerId}.inquiry.created:
+    description: The Topic on which values may be produced and consumed.
+    parameters:
+      customerId:
+        $ref: '#/components/parameters/customerId'
+    publish:
+      summary: A descriotion.
+      operationId: receiveLightMeasurement
+      traits:
+        - $ref: '#/components/operationTraits/kafka'
+      message:
+        $ref: '#/components/messages/carInformation'
+
+components:
+  messages:
+    carInformation:
+      name: carInformation
+      title: Car Informatins
+      summary: Some description.
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/commonHeaders'
+      payload:
+        $ref: "#/components/schemas/carInformationPayload"
+  schemas:        
+    carInformationPayload:
+      type: object
+      properties:
+        plateId:
+          type: string
+        model:
+          type: string
+  parameters:
+    customerId:
+      description: The ID of the customer.
+      schema:
+        type: string
+  messageTraits:
+    commonHeaders:
+      headers:
+        type: object
+        properties:
+          x-correlation-id:
+            type: string
+  securitySchemes:
+    saslScram:
+      type: scramSha256
+      description: Provide your username and password for SASL/SCRAM authentication
+  operationTraits:
+    kafka:
+      bindings:
+        kafka:
+          clientId: my-app-id
