@@ -3,7 +3,7 @@ info:
   title: Insurance Kafka API
   version: '1.0.0'
   description: |
-    The Insurance Kafka API API allows you to create an new Insurance.
+    The Insurance Kafka API allows you to create an new Insurance.
 
     ### Check out its awesome features:
 
